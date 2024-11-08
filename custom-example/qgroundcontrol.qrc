@@ -195,6 +195,7 @@
 		<file alias="QGroundControl/Controls/StructureScanMapVisual.qml">../src/PlanView/StructureScanMapVisual.qml</file>
 		<file alias="QGroundControl/Controls/SubMenuButton.qml">../src/QmlControls/SubMenuButton.qml</file>
 		<file alias="QGroundControl/Controls/SurveyMapVisual.qml">../src/PlanView/SurveyMapVisual.qml</file>
+		<file alias="QGroundControl/Controls/SpiralMapVisual.qml">../src/PlanView/SpiralMapVisual.qml</file>
 		<file alias="QGroundControl/Controls/TerrainStatus.qml">../src/PlanView/TerrainStatus.qml</file>
 		<file alias="QGroundControl/Controls/TakeoffItemMapVisual.qml">../src/PlanView/TakeoffItemMapVisual.qml</file>
 		<file alias="QGroundControl/Controls/ToolIndicatorPage.qml">../src/QmlControls/ToolIndicatorPage.qml</file>
@@ -300,6 +301,7 @@
 		<file alias="SimpleItemEditor.qml">../src/PlanView/SimpleItemEditor.qml</file>
 		<file alias="StructureScanEditor.qml">../src/PlanView/StructureScanEditor.qml</file>
 		<file alias="SurveyItemEditor.qml">../src/PlanView/SurveyItemEditor.qml</file>
+		<file alias="SpiralItemEditor.qml">../src/PlanView/SpiralItemEditor.qml</file>
 		<file alias="SyslinkComponent.qml">../src/AutoPilotPlugins/Common/SyslinkComponent.qml</file>
 		<file alias="TcpSettings.qml">../src/UI/preferences/TcpSettings.qml</file>
 		<file alias="TelemetrySettings.qml">../src/UI/preferences/TelemetrySettings.qml</file>
@@ -391,6 +393,7 @@
 		<file alias="SpeedSection.FactMetaData.json">../src/MissionManager/SpeedSection.FactMetaData.json</file>
 		<file alias="StructureScan.SettingsGroup.json">../src/MissionManager/StructureScan.SettingsGroup.json</file>
 		<file alias="Survey.SettingsGroup.json">../src/MissionManager/Survey.SettingsGroup.json</file>
+		<file alias="Spiral.SettingsGroup.json">../src/MissionManager/Spiral.SettingsGroup.json</file>
 		<file alias="TransectStyle.SettingsGroup.json">../src/MissionManager/TransectStyle.SettingsGroup.json</file>
 		<file alias="Units.SettingsGroup.json">../src/Settings/Units.SettingsGroup.json</file>
 		<file alias="USBBoardInfo.json">../src/Comms/USBBoardInfo.json</file>

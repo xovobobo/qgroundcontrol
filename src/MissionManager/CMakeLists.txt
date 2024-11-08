@@ -69,6 +69,10 @@ qt_add_library(MissionManager STATIC
     SurveyComplexItem.h
     SurveyPlanCreator.cc
     SurveyPlanCreator.h
+    SpiralComplexItem.cc
+    SpiralComplexItem.h
+    SpiralPlanCreator.cc
+    SpiralPlanCreator.h
     TakeoffMissionItem.cc
     TakeoffMissionItem.h
     TransectStyleComplexItem.cc

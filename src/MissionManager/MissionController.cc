@@ -15,6 +15,7 @@
 #include "QGCApplication.h"
 #include "SimpleMissionItem.h"
 #include "SurveyComplexItem.h"
+#include "SpiralComplexItem.h"
 #include "FixedWingLandingComplexItem.h"
 #include "VTOLLandingComplexItem.h"
 #include "StructureScanComplexItem.h"
@@ -417,7 +418,20 @@ VisualMissionItem* MissionController::insertComplexMissionItem(QString itemName,
 {
     ComplexMissionItem* newItem = nullptr;
 
-    if (itemName == SurveyComplexItem::name) {
+    if (itemName == SpiralComplexItem::name) {
+        newItem = new SpiralComplexItem(_masterController, _flyView, QString() /* kmlFile */);
+        newItem->setCoordinate(mapCenterCoordinate);
+
+        double                              prevAltitude;
+        QGroundControlQmlGlobal::AltMode    prevAltMode;
+        if (globalAltitudeMode() == QGroundControlQmlGlobal::AltitudeModeMixed) {
+            // We are in mixed altitude modes, so copy from previous. Otherwise alt mode will be set from global setting in constructor.
+            if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltMode)) {
+                qobject_cast<SpiralComplexItem*>(newItem)->cameraCalc()->setDistanceMode(prevAltMode);
+            }
+        }
+    }
+    else if (itemName == SurveyComplexItem::name) {
         newItem = new SurveyComplexItem(_masterController, _flyView, QString() /* kmlFile */);
         newItem->setCoordinate(mapCenterCoordinate);
 
@@ -451,7 +465,9 @@ VisualMissionItem* MissionController::insertComplexMissionItemFromKMLOrSHP(QStri
 {
     ComplexMissionItem* newItem = nullptr;
 
-    if (itemName == SurveyComplexItem::name) {
+    if (itemName == SpiralComplexItem::name) {
+        newItem = new SpiralComplexItem(_masterController, _flyView, file);
+    } else if (itemName == SurveyComplexItem::name) {
         newItem = new SurveyComplexItem(_masterController, _flyView, file);
     } else if (itemName == StructureScanComplexItem::name) {
         newItem = new StructureScanComplexItem(_masterController, _flyView, file);
@@ -470,7 +486,8 @@ VisualMissionItem* MissionController::insertComplexMissionItemFromKMLOrSHP(QStri
 void MissionController::_insertComplexMissionItemWorker(const QGeoCoordinate& mapCenterCoordinate, ComplexMissionItem* complexItem, int visualItemIndex, bool makeCurrentItem)
 {
     int sequenceNumber = _nextSequenceNumber();
-    bool surveyStyleItem = qobject_cast<SurveyComplexItem*>(complexItem) ||
+    bool surveyStyleItem = qobject_cast<SpiralComplexItem*>(complexItem) || 
+            qobject_cast<SurveyComplexItem*>(complexItem) ||
             qobject_cast<CorridorScanComplexItem*>(complexItem) ||
             qobject_cast<StructureScanComplexItem*>(complexItem);
 
@@ -531,7 +548,7 @@ void MissionController::removeVisualItem(int viIndex)
         return;
     }
 
-    bool removeSurveyStyle = _visualItems->value<SurveyComplexItem*>(viIndex) || _visualItems->value<CorridorScanComplexItem*>(viIndex);
+    bool removeSurveyStyle = _visualItems->value<SpiralComplexItem*>(viIndex) || _visualItems->value<SurveyComplexItem*>(viIndex) || _visualItems->value<CorridorScanComplexItem*>(viIndex);
     VisualMissionItem* item = qobject_cast<VisualMissionItem*>(_visualItems->removeAt(viIndex));
 
     if (item == _takeoffMissionItem) {
@@ -545,7 +562,7 @@ void MissionController::removeVisualItem(int viIndex)
         // Determine if the mission still has another survey style item in it
         bool foundSurvey = false;
         for (int i=1; i<_visualItems->count(); i++) {
-            if (_visualItems->value<SurveyComplexItem*>(i) || _visualItems->value<CorridorScanComplexItem*>(i)) {
+            if (_visualItems->value<SpiralComplexItem*>(i) || _visualItems->value<SurveyComplexItem*>(i) || _visualItems->value<CorridorScanComplexItem*>(i)) {
                 foundSurvey = true;
                 break;
             }
@@ -814,7 +831,16 @@ bool MissionController::_loadJsonMissionFileV2(const QJsonObject& json, QmlObjec
             }
             QString complexItemType = itemObject[ComplexMissionItem::jsonComplexItemTypeKey].toString();
 
-            if (complexItemType == SurveyComplexItem::jsonComplexItemTypeValue) {
+            if (complexItemType == SpiralComplexItem::jsonComplexItemTypeValue) {
+                qCDebug(MissionControllerLog) << "Loading Spiral: nextSequenceNumber" << nextSequenceNumber;
+                SpiralComplexItem* surveyItem = new SpiralComplexItem(_masterController, _flyView, QString() /* kmlFile */);
+                if (!surveyItem->load(itemObject, nextSequenceNumber++, errorString)) {
+                    return false;
+                }
+                nextSequenceNumber = surveyItem->lastSequenceNumber() + 1;
+                qCDebug(MissionControllerLog) << "Spiral load complete: nextSequenceNumber" << nextSequenceNumber;
+                visualItems->append(surveyItem);
+            } if (complexItemType == SurveyComplexItem::jsonComplexItemTypeValue) {
                 qCDebug(MissionControllerLog) << "Loading Survey: nextSequenceNumber" << nextSequenceNumber;
                 SurveyComplexItem* surveyItem = new SurveyComplexItem(_masterController, _flyView, QString() /* kmlFile */);
                 if (!surveyItem->load(itemObject, nextSequenceNumber++, errorString)) {
@@ -2243,6 +2269,7 @@ QStringList MissionController::complexMissionItemNames(void) const
 {
     QStringList complexItems;
 
+    complexItems.append(SpiralComplexItem::name);
     complexItems.append(SurveyComplexItem::name);
     complexItems.append(CorridorScanComplexItem::name);
     if (_controllerVehicle->multiRotor() || _controllerVehicle->vtol()) {
@@ -2625,6 +2652,11 @@ void MissionController::_takeoffItemNotRequiredChanged(void)
 QString MissionController::surveyComplexItemName(void) const
 {
     return SurveyComplexItem::name;
+}
+
+QString MissionController::spiralComplexItemName(void) const
+{
+    return SpiralComplexItem::name;
 }
 
 QString MissionController::corridorScanComplexItemName(void) const
