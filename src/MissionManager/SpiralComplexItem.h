@@ -28,18 +28,18 @@ public:
     /// @param kmlOrShpFile Polygon comes from this file, empty for default polygon
     SpiralComplexItem(PlanMasterController* masterController, bool flyView, const QString& kmlOrShpFile);
 
-    Q_PROPERTY(Fact*            angleStep              READ angleStep              CONSTANT)
-    Q_PROPERTY(Fact*            radiusStep             READ radiusStep             CONSTANT)
-    Q_PROPERTY(Fact*            numPoints              READ numPoints              CONSTANT)
+    Q_PROPERTY(Fact*            resolution             READ resolution             CONSTANT)
+    Q_PROPERTY(Fact*            radius                 READ radius                 CONSTANT)
+    Q_PROPERTY(Fact*            distanceBetweenSpirals READ distanceBetweenSpirals CONSTANT)
     Q_PROPERTY(Fact*            flyAlternateTransects  READ flyAlternateTransects  CONSTANT)
     Q_PROPERTY(Fact*            splitConcavePolygons   READ splitConcavePolygons   CONSTANT)
     Q_PROPERTY(QGeoCoordinate   centerCoordinate       READ centerCoordinate       WRITE setCenterCoordinate)
 
-    Fact* angleStep             (void) { return &_angleStepFact; }
-    Fact* radiusStep             (void) { return &_radiusStepFact; }
-    Fact* numPoints             (void) { return &_numPointsFact; }
-    Fact* flyAlternateTransects (void) { return &_flyAlternateTransectsFact; }
-    Fact* splitConcavePolygons  (void) { return &_splitConcavePolygonsFact; }
+    Fact* resolution              (void) { return &_resolutionFact; }
+    Fact* radius                  (void) { return &_radiusFact; }
+    Fact* distanceBetweenSpirals  (void) { return &_distanceBetweenSpiralsFact; }
+    Fact* flyAlternateTransects   (void) { return &_flyAlternateTransectsFact; }
+    Fact* splitConcavePolygons    (void) { return &_splitConcavePolygonsFact; }
 
     Q_INVOKABLE void rotateEntryPoint(void);
 
@@ -82,9 +82,9 @@ public:
     static constexpr const char* jsonV3ComplexItemTypeValue = "spiral";
 
     static constexpr const char* settingsGroup =              "Spiral";
-    static constexpr const char* stepAngleName =              "StepAngle";
-    static constexpr const char* radiusStepName =             "RadiusStep";
-    static constexpr const char* numPointsName =              "NumPoints";
+    static constexpr const char* resolutionName =             "Resolution";
+    static constexpr const char* radiusName =                 "Radius";
+    static constexpr const char* distanceBetweenSpiralsName = "DistanceBetweenSpirals";
     static constexpr const char* gridEntryLocationName =      "GridEntryLocation";
     static constexpr const char* flyAlternateTransectsName =  "FlyAlternateTransects";
     static constexpr const char* splitConcavePolygonsName =   "SplitConcavePolygons";
@@ -150,21 +150,22 @@ private:
 
     QMap<QString, FactMetaData*> _metaDataMap;
 
-    SettingsFact    _angleStepFact;
-    SettingsFact    _radiusStepFact;
-    SettingsFact    _numPointsFact;
+    SettingsFact    _resolutionFact;
+    SettingsFact    _radiusFact;
+
+    SettingsFact    _distanceBetweenSpiralsFact;
     SettingsFact    _flyAlternateTransectsFact;
     SettingsFact    _splitConcavePolygonsFact;
     int             _entryPoint;
     bool            _Rotate;
 
-    static constexpr const char* _jsonStepAngleKey =          "angle";
+    static constexpr const char* _jsonResolutionKey =          "resolution";
     static constexpr const char* _jsonEntryPointKey =         "entryLocation";
 
     static constexpr const char* _jsonV3GridObjectKey =                   "grid";
     static constexpr const char* _jsonV3GridAltitudeKey =                 "altitude";
     static constexpr const char* _jsonV3GridAltitudeRelativeKey =         "relativeAltitude";
-    static constexpr const char* _jsonV3StepAngleKey =                    "angle";
+    static constexpr const char* _jsonV3ResolutionKey =                   "resolution";
     static constexpr const char* _jsonV3GridSpacingKey =                  "spacing";
     static constexpr const char* _jsonV3EntryPointKey =                   "entryLocation";
     static constexpr const char* _jsonV3TurnaroundDistKey =               "turnAroundDistance";

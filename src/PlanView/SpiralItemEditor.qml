@@ -35,64 +35,64 @@ TransectStyleComplexItemEditor {
             rowSpacing:         _margin
             columns:            2
 
-            QGCLabel { text: qsTr("Angle Step") }
+            QGCLabel { text: qsTr("Resolution") }
             FactTextField {
-                fact:                   missionItem.angleStep
+                fact:                   missionItem.resolution
                 Layout.fillWidth:       true
-                onUpdated:              angleStepSlider.value = missionItem.angleStep.value
+                onUpdated:              resolutionSlider.value = missionItem.resolution.value
             }
 
             QGCSlider {
-                id:                     angleStepSlider
-                from:                   0
-                to:                     359
+                id:                     resolutionSlider
+                from:                   0.25
+                to:                     100.0
+                stepSize:               0.25
+                tickmarksEnabled:       false
+                Layout.fillWidth:       true
+                Layout.columnSpan:      2
+                Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 1.5
+                onValueChanged:         missionItem.resolution.value = value
+                Component.onCompleted:  value = missionItem.resolution.value
+                live: true
+            }
+
+            QGCLabel { text: qsTr("Radius") }
+            FactTextField {
+                fact:                   missionItem.radius
+                Layout.fillWidth:       true
+                onUpdated:              radiusSlider.value = missionItem.radius.value
+            }
+            QGCSlider {
+                id:                     radiusSlider
+                from:                   0.1
+                to:                     10000.0
                 stepSize:               0.1
                 tickmarksEnabled:       false
                 Layout.fillWidth:       true
                 Layout.columnSpan:      2
                 Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 1.5
-                onValueChanged:         missionItem.angleStep.value = value
-                Component.onCompleted:  value = missionItem.angleStep.value
+                onValueChanged:         missionItem.radius.value = value
+                Component.onCompleted:  value = missionItem.radius.value
                 live: true
             }
 
-            QGCLabel { text: qsTr("Radius Step") }
+            QGCLabel { text: qsTr("Dist btw spirals") }
             FactTextField {
-                fact:                   missionItem.radiusStep
+                fact:                   missionItem.distanceBetweenSpirals
                 Layout.fillWidth:       true
-                onUpdated:              radiusStepSlider.value = missionItem.radiusStep.value
+                onUpdated:              distanceBetweenSpiralsSlider.value = missionItem.distanceBetweenSpirals.value
             }
             QGCSlider {
-                id:                     radiusStepSlider
-                from:                   0
-                to:                     100
-                stepSize:               0.001
+                id:                     distanceBetweenSpiralsSlider
+                from:                   0.1
+                to:                     100.0
+                stepSize:               0.1
                 tickmarksEnabled:       false
                 Layout.fillWidth:       true
                 Layout.columnSpan:      2
                 Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 1.5
-                onValueChanged:         missionItem.radiusStep.value = value
-                Component.onCompleted:  value = missionItem.radiusStep.value
-                live: true
-            }
-
-            QGCLabel { text: qsTr("Num Points") }
-            FactTextField {
-                fact:                   missionItem.numPoints
-                Layout.fillWidth:       true
-                onUpdated:              numPointspSlider.value = missionItem.numPoints.value
-            }
-            QGCSlider {
-                id:                     numPointspSlider
-                from:                   0
-                to:                     1000
-                stepSize:               1
-                tickmarksEnabled:       false
-                Layout.fillWidth:       true
-                Layout.columnSpan:      2
-                Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 1.5
-                onValueChanged:         missionItem.numPoints.value = value
-                Component.onCompleted:  value = missionItem.numPoints.value
+                onValueChanged:         missionItem.distanceBetweenSpirals.value = value
+                Component.onCompleted:  value = missionItem.distanceBetweenSpirals.value
                 live: true
             }
 
