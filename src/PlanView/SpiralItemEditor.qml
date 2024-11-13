@@ -35,25 +35,15 @@ TransectStyleComplexItemEditor {
             rowSpacing:         _margin
             columns:            2
 
-            QGCLabel { text: qsTr("Resolution") }
-            FactTextField {
-                fact:                   missionItem.resolution
-                Layout.fillWidth:       true
-                onUpdated:              resolutionSlider.value = missionItem.resolution.value
-            }
 
-            QGCSlider {
-                id:                     resolutionSlider
-                from:                   0.25
-                to:                     100.0
-                stepSize:               0.25
-                tickmarksEnabled:       false
-                Layout.fillWidth:       true
-                Layout.columnSpan:      2
-                Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 1.5
-                onValueChanged:         missionItem.resolution.value = value
-                Component.onCompleted:  value = missionItem.resolution.value
-                live: true
+            QGCLabel {
+                text:       qsTr("Resolution")
+                visible:    !forPresets
+            }
+            FactTextField {
+                Layout.fillWidth:   true
+                fact:               missionItem.resolution
+                visible:            !forPresets
             }
 
             QGCLabel { text: qsTr("Radius") }
@@ -64,8 +54,8 @@ TransectStyleComplexItemEditor {
             }
             QGCSlider {
                 id:                     radiusSlider
-                from:                   0.1
-                to:                     10000.0
+                from:                   0
+                to:                     10000
                 stepSize:               0.1
                 tickmarksEnabled:       false
                 Layout.fillWidth:       true
@@ -84,8 +74,8 @@ TransectStyleComplexItemEditor {
             }
             QGCSlider {
                 id:                     distanceBetweenSpiralsSlider
-                from:                   0.1
-                to:                     100.0
+                from:                   0
+                to:                     10000
                 stepSize:               0.1
                 tickmarksEnabled:       false
                 Layout.fillWidth:       true
@@ -94,16 +84,6 @@ TransectStyleComplexItemEditor {
                 onValueChanged:         missionItem.distanceBetweenSpirals.value = value
                 Component.onCompleted:  value = missionItem.distanceBetweenSpirals.value
                 live: true
-            }
-
-            QGCLabel {
-                text:       qsTr("Turnaround dist")
-                visible:    !forPresets
-            }
-            FactTextField {
-                Layout.fillWidth:   true
-                fact:               missionItem.turnAroundDistance
-                visible:            !forPresets
             }
 
             QGCOptionsComboBox {
