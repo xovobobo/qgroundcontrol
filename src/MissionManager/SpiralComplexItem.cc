@@ -29,14 +29,14 @@ QGC_LOGGING_CATEGORY(SpiralComplexItemLog, "SpiralComplexItemLog")
 const QString SpiralComplexItem::name(SpiralComplexItem::tr("Spiral"));
 
 SpiralComplexItem::SpiralComplexItem(PlanMasterController* masterController, bool flyView, const QString& kmlOrShpFile)
-    : TransectStyleComplexItem  (masterController, flyView, settingsGroup)
-    , _metaDataMap              (FactMetaData::createMapFromJsonFile(QStringLiteral(":/json/Spiral.SettingsGroup.json"), this))
-    , _angleStepFact            (settingsGroup, _metaDataMap[stepAngleName])
-    , _radiusStepFact           (settingsGroup, _metaDataMap[radiusStepName])
-    , _numPointsFact            (settingsGroup, _metaDataMap[numPointsName])
-    , _flyAlternateTransectsFact(settingsGroup, _metaDataMap[flyAlternateTransectsName])
-    , _splitConcavePolygonsFact (settingsGroup, _metaDataMap[splitConcavePolygonsName])
-    , _entryPoint               (EntryLocationTopLeft)
+    : TransectStyleComplexItem    (masterController, flyView, settingsGroup)
+    , _metaDataMap                (FactMetaData::createMapFromJsonFile(QStringLiteral(":/json/Spiral.SettingsGroup.json"), this))
+    , _resolutionFact             (settingsGroup, _metaDataMap[resolutionName])
+    , _radiusFact                 (settingsGroup, _metaDataMap[radiusName])
+    , _distanceBetweenSpiralsFact (settingsGroup, _metaDataMap[distanceBetweenSpiralsName])
+    , _flyAlternateTransectsFact  (settingsGroup, _metaDataMap[flyAlternateTransectsName])
+    , _splitConcavePolygonsFact   (settingsGroup, _metaDataMap[splitConcavePolygonsName])
+    , _entryPoint                 (EntryLocationTopLeft)
 {
     _editorQml = "qrc:/qml/SpiralItemEditor.qml";
 
@@ -50,22 +50,22 @@ SpiralComplexItem::SpiralComplexItem(PlanMasterController* masterController, boo
         _cameraCalc.distanceToSurface()->setRawValue(qgcApp()->toolbox()->settingsManager()->appSettings()->defaultMissionItemAltitude()->rawValue());
     }
 
-    connect(&_angleStepFact,            &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
-    connect(&_radiusStepFact,            &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
-    connect(&_numPointsFact,            &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
-    connect(&_flyAlternateTransectsFact,&Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
-    connect(&_splitConcavePolygonsFact, &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
-    connect(this,                       &SpiralComplexItem::refly90DegreesChanged,  this, &SpiralComplexItem::_setDirty);
+    connect(&_resolutionFact,             &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
+    connect(&_radiusFact,                 &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
+    connect(&_distanceBetweenSpiralsFact, &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
+    connect(&_flyAlternateTransectsFact,  &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
+    connect(&_splitConcavePolygonsFact,   &Fact::valueChanged,                        this, &SpiralComplexItem::_setDirty);
+    connect(this,                         &SpiralComplexItem::refly90DegreesChanged,  this, &SpiralComplexItem::_setDirty);
 
-    connect(&_angleStepFact,            &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
-    connect(&_radiusStepFact,           &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
-    connect(&_numPointsFact,            &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
-    connect(&_flyAlternateTransectsFact,&Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
-    connect(&_splitConcavePolygonsFact, &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
-    connect(this,                       &SpiralComplexItem::refly90DegreesChanged,  this, &SpiralComplexItem::_rebuildTransects);
+    connect(&_resolutionFact,             &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
+    connect(&_radiusFact,                 &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
+    connect(&_distanceBetweenSpiralsFact, &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
+    connect(&_flyAlternateTransectsFact,  &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
+    connect(&_splitConcavePolygonsFact,   &Fact::valueChanged,                        this, &SpiralComplexItem::_rebuildTransects);
+    connect(this,                         &SpiralComplexItem::refly90DegreesChanged,  this, &SpiralComplexItem::_rebuildTransects);
 
-    connect(&_surveyAreaPolygon,        &QGCMapPolygon::isValidChanged,             this, &SpiralComplexItem::_updateWizardMode);
-    connect(&_surveyAreaPolygon,        &QGCMapPolygon::traceModeChanged,           this, &SpiralComplexItem::_updateWizardMode);
+    connect(&_surveyAreaPolygon,          &QGCMapPolygon::isValidChanged,             this, &SpiralComplexItem::_updateWizardMode);
+    connect(&_surveyAreaPolygon,          &QGCMapPolygon::traceModeChanged,           this, &SpiralComplexItem::_updateWizardMode);
 
     if (!kmlOrShpFile.isEmpty()) {
         _surveyAreaPolygon.loadKMLOrSHPFile(kmlOrShpFile);
@@ -97,7 +97,7 @@ void SpiralComplexItem::_saveCommon(QJsonObject& saveObject)
     saveObject[JsonHelper::jsonVersionKey] =                    5;
     saveObject[VisualMissionItem::jsonTypeKey] =                VisualMissionItem::jsonTypeComplexItemValue;
     saveObject[ComplexMissionItem::jsonComplexItemTypeKey] =    jsonComplexItemTypeValue;
-    saveObject[_jsonStepAngleKey] =                             _angleStepFact.rawValue().toDouble();
+    saveObject[_jsonResolutionKey] =                            _resolutionFact.rawValue().toDouble();
     saveObject[_jsonFlyAlternateTransectsKey] =                 _flyAlternateTransectsFact.rawValue().toBool();
     saveObject[_jsonSplitConcavePolygonsKey] =                  _splitConcavePolygonsFact.rawValue().toBool();
     saveObject[_jsonEntryPointKey] =                            _entryPoint;
@@ -170,7 +170,7 @@ bool SpiralComplexItem::_loadV4V5(const QJsonObject& complexObject, int sequence
         { VisualMissionItem::jsonTypeKey,               QJsonValue::String, true },
         { ComplexMissionItem::jsonComplexItemTypeKey,   QJsonValue::String, true },
         { _jsonEntryPointKey,                           QJsonValue::Double, true },
-        { _jsonStepAngleKey,                            QJsonValue::Double, true },
+        { _jsonResolutionKey,                           QJsonValue::Double, true },
         { _jsonFlyAlternateTransectsKey,                QJsonValue::Bool,   false },
     };
 
@@ -206,7 +206,7 @@ bool SpiralComplexItem::_loadV4V5(const QJsonObject& complexObject, int sequence
         return false;
     }
 
-    _angleStepFact.setRawValue           (complexObject[_jsonStepAngleKey].toDouble());
+    _resolutionFact.setRawValue           (complexObject[_jsonResolutionKey].toDouble());
     _flyAlternateTransectsFact.setRawValue  (complexObject[_jsonFlyAlternateTransectsKey].toBool(false));
 
     if (version == 5) {
@@ -262,7 +262,7 @@ bool SpiralComplexItem::_loadV3(const QJsonObject& complexObject, int sequenceNu
     QList<JsonHelper::KeyValidateInfo> gridKeyInfoList = {
         { _jsonV3GridAltitudeKey,           QJsonValue::Double, true },
         { _jsonV3GridAltitudeRelativeKey,   QJsonValue::Bool,   true },
-        { _jsonV3StepAngleKey,              QJsonValue::Double, true },
+        { _jsonV3ResolutionKey,              QJsonValue::Double, true },
         { _jsonV3GridSpacingKey,            QJsonValue::Double, true },
         { _jsonEntryPointKey,               QJsonValue::Double, false },
         { _jsonV3TurnaroundDistKey,         QJsonValue::Double, true },
@@ -273,7 +273,7 @@ bool SpiralComplexItem::_loadV3(const QJsonObject& complexObject, int sequenceNu
         return false;
     }
 
-    _angleStepFact.setRawValue          (gridObject[_jsonV3StepAngleKey].toDouble());
+    _resolutionFact.setRawValue          (gridObject[_jsonV3ResolutionKey].toDouble());
     _turnAroundDistanceFact.setRawValue (gridObject[_jsonV3TurnaroundDistKey].toDouble());
 
     if (gridObject.contains(_jsonEntryPointKey)) {
@@ -477,28 +477,44 @@ void SpiralComplexItem::_rebuildTransectsPhase1WorkerSinglePolygon(bool refly)
         return;
     }
 
+    QGeoCoordinate center = _surveyAreaPolygon.center();
+
     // Convert from NED to Geo
     QList<QList<QGeoCoordinate>> transects;
 
-    int num_points = _numPointsFact.rawValue().toInt();
-    double radius_step = _radiusStepFact.rawValue().toDouble();
-    double angle_step = (M_PI / 180.0) * _angleStepFact.rawValue().toDouble();
-    QGeoCoordinate center = _surveyAreaPolygon.center();
+    double radius = _radiusFact.rawValue().toDouble();
+    double resolution = _resolutionFact.rawValue().toDouble();
+    double distance_between_spirals = _distanceBetweenSpiralsFact.rawValue().toDouble();
 
-    for (int i = 0; i < num_points - 2; i+=2) {
+    if (radius <= 0 || resolution <= 0 || distance_between_spirals <= 0)
+        return;
+
+    double angle_increment = 1.0 / resolution;
+    double ang = 0.0;
+
+    while (true)
+    {
         QList<QGeoCoordinate> transect;
 
-        double r = i * radius_step;
-        double ang = i * angle_step;
+        double r = (distance_between_spirals * ang) / (2* M_PI);
+
+        if (r > radius)
+        {
+            break;
+        }
+
         double x_meters = r * cos(ang);
         double y_meters = r * sin(ang);
+
         QGeoCoordinate coord1;
         QGCGeo::convertNedToGeo(y_meters, x_meters, 0, center, coord1);
+        ang += angle_increment;
 
-        double r2 = (i + 1) * radius_step;
-        double ang2 = (i + 1) * angle_step;
-        double x_meters2 = r2 * cos(ang2);
-        double y_meters2 = r2 * sin(ang2);
+
+        double r2 = (distance_between_spirals * ang) / (2* M_PI);
+        double x_meters2 = r2 * cos(ang);
+        double y_meters2 = r2 * sin(ang);
+        ang += angle_increment;
 
         QGeoCoordinate coord2;
         QGCGeo::convertNedToGeo(y_meters2, x_meters2, 0, center, coord2);
