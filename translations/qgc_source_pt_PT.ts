@@ -17810,6 +17810,101 @@ Pairar e capturar imagem</translation>
     </message>
   </context>
   <context>
+    <name>CustomTransectStyleComplexItemEditor</name>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="35"/>
+      <source>Done</source>
+      <translation>Pronto</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="91"/>
+      <source>WARNING: Photo interval is below minimum interval (%1 secs) supported by camera.</source>
+      <translation>AVISO: Intervalo de foto está abaixo do intervalo mínimo (%1 seg) suportado pela câmera.</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="101"/>
+      <source>Altitude</source>
+      <translation>Altitude</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="102"/>
+      <source>Trigger Dist</source>
+      <translation>Dist Gatilho</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="103"/>
+      <source>Spacing</source>
+      <translation>Espaçamento</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="122"/>
+      <source>Rotate Entry Point</source>
+      <translation>Rotacionar Ponto de Entrada</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="130"/>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="231"/>
+      <source>Statistics</source>
+      <translation>Estatísticas</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="162"/>
+      <source>Presets</source>
+      <translation>Pré-ajustes</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="177"/>
+      <source>Apply Preset</source>
+      <translation>Aplicar pré-ajustes</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="184"/>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="192"/>
+      <source>Delete Preset</source>
+      <translation>Deletar Pré-ajuste</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="193"/>
+      <source>Are you sure you want to delete &apos;%1&apos; preset?</source>
+      <translation>Tem certeza que deseja deletar o pré-ajuste &apos;%1&apos; </translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="209"/>
+      <source>Save Settings As New Preset</source>
+      <translation>Salvar Configurações como novo Pré-Ajuste</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="246"/>
+      <source>Save Preset</source>
+      <translation>Salvar Pré-ajuste</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="263"/>
+      <source>Save the current settings as a named preset.</source>
+      <translation>Salvar configurações atuais como um pré-ajuste nomeado.</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="268"/>
+      <source>Preset Name</source>
+      <translation>Nome da Predefinição</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="274"/>
+      <source>Enter preset name</source>
+      <translation>Digite Nome da Predefinição</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="281"/>
+      <source>Preset name cannot be blank.</source>
+      <translation>Nome da predefinição não pode ser em branco.</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/CustomTransectStyleComplexItemEditor.qml" line="284"/>
+      <source>Preset name cannot include the &quot;/&quot; character.</source>
+      <translation>Nome da predefinição não pode incluir o caractere &quot;/&quot;</translation>
+    </message>
+  </context>
+  <context>
     <name>TransectStyleComplexItemStats</name>
     <message>
       <location filename="../src/PlanView/TransectStyleComplexItemStats.qml" line="16"/>
