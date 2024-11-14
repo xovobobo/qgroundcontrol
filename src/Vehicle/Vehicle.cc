@@ -2122,6 +2122,13 @@ void Vehicle::startMission()
     _firmwarePlugin->startMission(this);
 }
 
+
+void Vehicle::startSearch()
+{
+    // TODO implement
+    qDebug() << "start search";
+}
+
 void Vehicle::guidedModeGotoLocation(const QGeoCoordinate& gotoCoord)
 {
     if (!guidedModeSupported()) {

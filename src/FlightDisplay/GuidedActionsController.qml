@@ -38,6 +38,7 @@ Item {
     readonly property string disarmTitle:                   qsTr("Disarm")
     readonly property string rtlTitle:                      qsTr("Return")
     readonly property string takeoffTitle:                  qsTr("Takeoff")
+    readonly property string searchTitle:                   qsTr("Search")
     readonly property string gripperTitle:                  qsTr("Gripper Function")
     readonly property string landTitle:                     qsTr("Land")
     readonly property string startMissionTitle:             qsTr("Start Mission")
@@ -66,6 +67,7 @@ Item {
     readonly property string disarmMessage:                     qsTr("Disarm the vehicle")
     readonly property string emergencyStopMessage:              qsTr("WARNING: THIS WILL STOP ALL MOTORS. IF VEHICLE IS CURRENTLY IN THE AIR IT WILL CRASH.")
     readonly property string takeoffMessage:                    qsTr("Takeoff from ground and hold position.")
+    readonly property string searchMessage:                     qsTr("Start search")
     readonly property string gripperMessage:                       qsTr("Grab or Release the cargo")
     readonly property string startMissionMessage:               qsTr("Takeoff from ground and start the current mission.")
     readonly property string continueMissionMessage:            qsTr("Continue the mission from the current waypoint.")
@@ -119,6 +121,8 @@ Item {
     readonly property int actionSetEstimatorOrigin:         28
     readonly property int actionSetFlightMode:              29
     readonly property int actionChangeHeading:              30
+    readonly property int actionSearch:                     255
+
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property var    _flyViewSettings:           QGroundControl.settingsManager.flyViewSettings
@@ -137,6 +141,7 @@ Item {
     property bool showDisarm:               _guidedActionsEnabled && _vehicleArmed && !_vehicleFlying
     property bool showRTL:                  _guidedActionsEnabled && _vehicleArmed && _activeVehicle.guidedModeSupported && _vehicleFlying && !_vehicleInRTLMode
     property bool showTakeoff:              _guidedActionsEnabled && _activeVehicle.takeoffVehicleSupported && !_vehicleFlying && _canTakeoff
+    property bool showSearch:               _guidedActionsEnabled
     property bool showLand:                 _guidedActionsEnabled && _activeVehicle.guidedModeSupported && _vehicleArmed && !_activeVehicle.fixedWing && !_vehicleInLandMode
     property bool showStartMission:         _guidedActionsEnabled && _missionAvailable && !_missionActive && !_vehicleFlying && _canStartMission
     property bool showContinueMission:      _guidedActionsEnabled && _missionAvailable && !_missionActive && _vehicleArmed && _vehicleFlying && (_currentMissionIndex < _missionItemCount - 1)
@@ -429,6 +434,11 @@ Item {
             confirmDialog.hideTrigger = Qt.binding(function() { return !showTakeoff })
             guidedValueSlider.visible = true
             break;
+        case actionSearch:
+            confirmDialog.title = searchTitle
+            confirmDialog.message = searchMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return !showSearch })
+            break;
         case actionStartMission:
             showImmediate = false
             confirmDialog.title = startMissionTitle
@@ -663,6 +673,9 @@ Item {
             break
         case actionChangeHeading:
             _activeVehicle.guidedModeChangeHeading(actionData)
+            break
+        case actionSearch:
+            _activeVehicle.startSearch()
             break
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)

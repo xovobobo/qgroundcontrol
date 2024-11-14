@@ -360,6 +360,8 @@ public:
 
     Q_INVOKABLE void startMission();
 
+    Q_INVOKABLE void startSearch();
+
     /// Alter the current mission item on the vehicle
     Q_INVOKABLE void setCurrentMissionSequence(int seq);
 
